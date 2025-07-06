@@ -23,6 +23,9 @@ export class Patient {
   @Prop({ required: true, trim: true })
   address: string;
 
+  @Prop({ default: 0 })
+  totalVisits: number;
+
   @Prop({ default: Date.now })
   dateCreated: Date;
 

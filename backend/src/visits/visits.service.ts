@@ -4,11 +4,14 @@ import { Model, Types } from 'mongoose';
 import { Visit, VisitDocument } from './schemas/visit.schema';
 import { CreateVisitDto } from './dto/create-visit.dto';
 import { UpdateVisitDto } from './dto/update-visit.dto';
+import { Patient, PatientDocument } from '../patients/schemas/patient.schema';
+
 
 @Injectable()
 export class VisitsService {
   constructor(
     @InjectModel(Visit.name) private visitModel: Model<VisitDocument>,
+    @InjectModel(Patient.name) private patientModel: Model<PatientDocument>,
   ) {}
 
   async create(patientId: string, createVisitDto: CreateVisitDto): Promise<Visit> {
@@ -16,7 +19,16 @@ export class VisitsService {
       ...createVisitDto,
       patientId: new Types.ObjectId(patientId),
     });
-    return createdVisit.save();
+  
+    const savedVisit = await createdVisit.save();
+    
+    // Increment the patient's visit count
+    await this.patientModel.findByIdAndUpdate(
+      patientId,
+      { $inc: { totalVisits: 1 } }
+    );
+  
+    return savedVisit;
   }
 
   async findByPatient(patientId: string): Promise<Visit[]> {
