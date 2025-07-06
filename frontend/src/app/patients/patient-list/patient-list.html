@@ -1,52 +1,56 @@
 <div class="patient-list-container">
   <div class="patient-list-actions">
-    <button class="addPatientButton" color="primary" type="button" (click)="openAddPatientDialog()">Add Patient</button>    <mat-form-field appearance="outline">
-      <mat-label>Search by name or email</mat-label>
-      <input class="searchInput" matInput [(ngModel)]="search" (ngModelChange)="onSearch()" placeholder="Type to search..." />
+    <button class="addPatientButton" color="primary" type="button" (click)="openAddPatientDialog()">
+      Add Patient
+    </button>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Search patient by name or email </mat-label>
+      <input class="searchInput" matInput [(ngModel)]="search" (ngModelChange)="onSearch()"
+        placeholder="Type to search..." />
       <button class="closeButton" *ngIf="search" matSuffix (click)="clearSearch()" aria-label="Clear">
         <mat-icon>close</mat-icon>
       </button>
-    </mat-form-field>
+    </mat-form-field> 
   </div>
+  
 
   <table mat-table [dataSource]="(patients$ | async) ?? []" class="mat-elevation-z8" *ngIf="patients$ | async as patients">
-    <!-- First Name Column -->
+
     <ng-container matColumnDef="firstName">
       <th mat-header-cell *matHeaderCellDef> First Name </th>
       <td mat-cell *matCellDef="let patient"> {{patient.firstName}} </td>
     </ng-container>
 
-    <!-- Last Name Column -->
+
     <ng-container matColumnDef="lastName">
       <th mat-header-cell *matHeaderCellDef> Last Name </th>
       <td mat-cell *matCellDef="let patient"> {{patient.lastName}} </td>
     </ng-container>
 
-    <!-- DOB Column -->
     <ng-container matColumnDef="dob">
       <th mat-header-cell *matHeaderCellDef> Date of Birth </th>
       <td mat-cell *matCellDef="let patient"> {{patient.dob | date}} </td>
     </ng-container>
 
-    <!-- Email Column -->
+
     <ng-container matColumnDef="email">
       <th mat-header-cell *matHeaderCellDef> Email </th>
       <td mat-cell *matCellDef="let patient"> {{patient.email}} </td>
     </ng-container>
 
-    <!-- Phone Number Column -->
+   
     <ng-container matColumnDef="phoneNumber">
       <th mat-header-cell *matHeaderCellDef> Phone Number </th>
       <td mat-cell *matCellDef="let patient"> {{patient.phoneNumber}} </td>
     </ng-container>
 
-    <!-- Address Column -->
     <ng-container matColumnDef="address">
       <th mat-header-cell *matHeaderCellDef> Address </th>
       <td mat-cell *matCellDef="let patient"> {{patient.address}} </td>
     </ng-container>
 
-    <!-- Actions Column -->
+
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef> Actions </th>
       <td mat-cell *matCellDef="let patient">
