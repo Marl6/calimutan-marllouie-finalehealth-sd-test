@@ -13,37 +13,43 @@ import {
   import { CreateVisitDto } from './dto/create-visit.dto';
   import { UpdateVisitDto } from './dto/update-visit.dto';
   
-  @Controller()
+  @Controller('visits')
   export class VisitsController {
     constructor(private readonly visitsService: VisitsService) {}
   
     @Post('patients/:patientId/visits')
     @HttpCode(HttpStatus.CREATED)
+
     create(
       @Param('patientId') patientId: string,
       @Body() createVisitDto: CreateVisitDto,
     ) {
       return this.visitsService.create(patientId, createVisitDto);
     }
+
+    @Get()
+    getAllVisits() {
+      return this.visitsService.getAllVisits();
+    }
   
     @Get('patients/:patientId/visits')
-    findByPatient(@Param('patientId') patientId: string) {
-      return this.visitsService.findByPatient(patientId);
+    getAllVisitsByPatientID(@Param('patientId') patientId: string) {
+      return this.visitsService.getAllVisitsByPatientID(patientId);
     }
   
-    @Get('visits/:id')
-    findOne(@Param('id') id: string) {
-      return this.visitsService.findOne(id);
+    @Get(':id')
+    getVisitByVisitId(@Param('id') id: string) {
+      return this.visitsService.getVisitByVisitId(id);
     }
   
-    @Patch('visits/:id')
+    @Patch(':id')
     update(@Param('id') id: string, @Body() updateVisitDto: UpdateVisitDto) {
       return this.visitsService.update(id, updateVisitDto);
     }
   
-    @Delete('visits/:id')
+    @Delete(':id')
     @HttpCode(HttpStatus.NO_CONTENT)
-    remove(@Param('id') id: string) {
-      return this.visitsService.remove(id);
+    delete(@Param('id') id: string) {
+      return this.visitsService.delete(id);
     }
   }

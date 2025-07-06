@@ -31,14 +31,18 @@ export class VisitsService {
     return savedVisit;
   }
 
-  async findByPatient(patientId: string): Promise<Visit[]> {
+  async getAllVisits(): Promise<Visit[]> {
+    return this.visitModel.find().sort({ visitDate: -1 }).exec();
+  }
+  
+  async getAllVisitsByPatientID(patientId: string): Promise<Visit[]> {
     return this.visitModel
       .find({ patientId: new Types.ObjectId(patientId) })
       .sort({ visitDate: -1 })
       .exec();
   }
 
-  async findOne(id: string): Promise<Visit> {
+  async getVisitByVisitId(id: string): Promise<Visit> {
     const visit = await this.visitModel.findById(id).exec();
     if (!visit) {
       throw new NotFoundException(`Visit with ID ${id} not found`);
@@ -57,7 +61,7 @@ export class VisitsService {
     return updatedVisit;
   }
 
-  async remove(id: string): Promise<void> {
+  async delete(id: string): Promise<void> {
     const result = await this.visitModel.findByIdAndDelete(id).exec();
     if (!result) {
       throw new NotFoundException(`Visit with ID ${id} not found`);
