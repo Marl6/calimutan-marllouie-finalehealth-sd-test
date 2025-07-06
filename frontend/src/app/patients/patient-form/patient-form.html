@@ -1,0 +1,45 @@
+<div class="patientForm">
+    <div class="form-header">
+        <h1>{{ isEdit ? 'Edit Patient Detail' : 'Add New Patient' }}</h1>
+    </div>
+<form class="patientForm" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="fill" class="full-width">
+        <mat-label>First Name</mat-label>
+        <input matInput formControlName="firstName" title="firstName" required>
+        <mat-error *ngIf="form.get('firstName')?.hasError('required')">First name is required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Last Name</mat-label>
+        <input matInput formControlName="lastName" title="lastName" required>
+        <mat-error *ngIf="form.get('lastName')?.hasError('required')">Last name is required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Date of Birth</mat-label>
+        <input matInput type="date" formControlName="dob" title="dob" required>
+        <mat-error *ngIf="form.get('dob')?.hasError('required')">Date of birth is required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" title="email" required>
+        <mat-error *ngIf="form.get('email')?.hasError('required')">Email is required</mat-error>
+        <mat-error *ngIf="form.get('email')?.hasError('email')">Invalid email</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Phone Number</mat-label>
+        <input matInput formControlName="phoneNumber" title="phoneNumber" required>
+        <mat-error *ngIf="form.get('phoneNumber')?.hasError('required')">Phone number is required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Address</mat-label>
+        <input matInput formControlName="address" title="address" required>
+        <mat-error *ngIf="form.get('address')?.hasError('required')">Address is required</mat-error>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">Save</button>
+    </form>
+</div>
