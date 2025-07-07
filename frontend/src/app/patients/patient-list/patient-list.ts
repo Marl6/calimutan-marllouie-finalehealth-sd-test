@@ -134,18 +134,14 @@ export class PatientList implements OnInit {
     if (confirm(`Are you sure you want to delete ${fullName}?`)) {
       this.patientService.deletePatient(id).subscribe({
         next: () => {
-          this.onSearch();
-          console.log(`Deleted patient: ${fullName}`);
-        },
+          this.onSearch();        },
         error: err => alert('Delete failed: ' + (err.error?.message || err.message))
       });
     }
   }
 
   onRowClick(patient: any): void {
-    console.log('Clicked patient ID:', patient.id || patient._id || '[No ID found]');
     console.log('Patient row object:', patient);
-
   }
 
   viewPatientSummary(patient: any): void {

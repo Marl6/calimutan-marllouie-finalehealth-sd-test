@@ -182,7 +182,6 @@ public filterPatients(value: string | Patient): Patient[] {
   }
 
   onSubmit(): void {
-    console.log('Form submitted:', this.form.value);
     if (this.form.invalid) return;
 
     const visitData = {
