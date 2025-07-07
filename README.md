@@ -23,7 +23,7 @@ calimutan-marllouie-finalehealth-sd-test/
 ### 1. Clone the Repository
 
 ```bash
-git clone 
+git clone https://github.com/Marl6/calimutan-marllouie-finalehealth-sd-test.git
 cd calimutan-marllouie-finalehealth-sd-test
 ```
 
