@@ -57,7 +57,7 @@ Once running, the backend should be accessible at `http://localhost:3000/`.
 ## 💻 Frontend Setup (Angular)
 
 ```bash
-cd ../frontend
+cd frontend
 
 # Install dependencies
 yarn install
