@@ -54,6 +54,10 @@ Once running, the backend should be accessible at `http://localhost:3000/`.
 
 ---
 
+##⚠️ Note:
+If you're using local MongoDB, ensure it's running on localhost:27017.
+Otherwise, update the MONGO_URI in your .env file to use MongoDB Atlas credentials.
+
 ## 💻 Frontend Setup (Angular)
 
 ```bash
