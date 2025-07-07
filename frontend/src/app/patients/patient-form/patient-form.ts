@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PatientService } from '../../services/patient-services';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-patient-form',
@@ -33,6 +34,9 @@ export class PatientForm implements OnInit {
   form!: FormGroup;
   patientId?: string;
   isEdit = false;
+
+  constructor(
+    private snackBar: MatSnackBar){}
 
   ngOnInit(): void {
     this.form = this.fb.group({
@@ -70,22 +74,26 @@ export class PatientForm implements OnInit {
 
   onSubmit(): void {
     if (this.form.invalid) return;
-
+  
     const action$ = this.isEdit && this.patientId
       ? this.patientService.updatePatient(this.patientId, this.form.value)
       : this.patientService.createPatient(this.form.value);
-
+  
     action$.subscribe({
       next: () => {
+        const message = this.isEdit ? 'Patient updated successfully' : 'Patient created successfully';
+        this.snackBar.open(message, 'Close', { duration: 3000, verticalPosition: 'top' });
+  
         if (this.dialogRef) {
-          alert(`${this.isEdit ? 'Patient updated successfully' : 'Patient created successfully'}`);
           this.dialogRef.close(true);
-     
-        } else { 
+        } else {
           this.router.navigate(['/patients']);
         }
       },
-      error: err => alert(`${this.isEdit ? 'Update' : 'Create'} failed: ${err.error?.message || err.message}`)
+      error: err => {
+        const errorMsg = this.isEdit ? 'Update failed' : 'Create failed';
+        this.snackBar.open(`${errorMsg}: ${err.error?.message || err.message}`, 'Close', { duration: 4000 });
+      }
     });
   }
 }

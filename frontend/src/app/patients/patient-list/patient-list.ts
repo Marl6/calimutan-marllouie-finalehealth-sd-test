@@ -13,6 +13,8 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { CommonModule } from '@angular/common';
 import { Summary } from '../../summary/summary';
 import { MatButtonModule } from '@angular/material/button';
+import { ConfirmationDialog } from '../../shared/confirm/confirm'; 
+
 
 @Component({
   selector: 'app-patient-list',
@@ -29,7 +31,7 @@ import { MatButtonModule } from '@angular/material/button';
     MatDialogModule,
     CommonModule,
     MatPaginatorModule,
-    MatButtonModule
+    MatButtonModule,
   ],
   templateUrl: './patient-list.html',
   styleUrl: './patient-list.scss'
@@ -59,7 +61,7 @@ export class PatientList implements OnInit {
 
   constructor(
     private patientService: PatientService,
-    private dialog: MatDialog 
+    private dialog: MatDialog,
   ) {}
 
   ngOnInit() {
@@ -145,14 +147,24 @@ export class PatientList implements OnInit {
       return;
     }
   
-    if (confirm(`Are you sure you want to delete ${fullName}?`)) {
-      this.patientService.deletePatient(id).subscribe({
-        next: () => {
-          this.onSearch();        },
-        error: err => alert('Delete failed: ' + (err.error?.message || err.message))
-      });
-    }
+    const dialogRef = this.dialog.open(ConfirmationDialog, {
+      width: '400px',
+      data: {
+        title: 'Delete Confirmation',
+        message: `Are you sure you want to delete ${fullName}?`
+      }
+    });
+  
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+        this.patientService.deletePatient(id).subscribe({
+          next: () => this.onSearch(),
+          error: err => alert('Delete failed: ' + (err.error?.message || err.message))
+        });
+      }
+    });
   }
+  
 
   viewPatientSummary(patient: any): void {
     this.dialog.open(Summary, {

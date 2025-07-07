@@ -15,6 +15,7 @@ import { VisitService } from '../../services/visit-services';
 import { PatientService } from '../../services/patient-services';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { VisitType } from '../../enums/enums';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 export interface Patient {
   _id: string;
@@ -93,7 +94,7 @@ export class VisitForm implements OnInit {
     { value: VisitType.CLINIC, label: 'Clinic' }
   ];
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private snackBar: MatSnackBar) {
     this.form = this.fb.group({
       patientId: ['', Validators.required],
       patientDisplay: [''],
@@ -199,27 +200,45 @@ public filterPatients(value: string | Patient): Patient[] {
 
   onSubmit(): void {
     if (this.form.invalid) return;
-
+  
     const visitData = {
       visitDate: this.form.value.visitDate,
       notes: this.form.value.notes,
       visitType: this.form.value.visitType
     };
-
+  
     const action$ = this.isEdit && this.visitId
       ? this.visitService.updateVisit(this.visitId, visitData)
       : this.visitService.createVisit(this.form.value.patientId, visitData);
-
+  
     action$.subscribe({
       next: () => {
+        this.snackBar.open(
+          this.isEdit ? 'Visit updated successfully' : 'Visit created successfully',
+          'Close',
+          {
+            duration: 3000,
+            verticalPosition: 'top', // 👈 Show at the top
+          }
+        );
+  
         if (this.dialogRef) {
-          alert(`${this.isEdit ? 'Visit updated successfully' : 'Visit created successfully'}`);
           this.dialogRef.close(true);
         } else {
           this.router.navigate(['/visits']);
         }
       },
-      error: err => alert(`${this.isEdit ? 'Update' : 'Create'} failed: ${err.error?.message || err.message}`)
+      error: err => {
+        this.snackBar.open(
+          `${this.isEdit ? 'Update' : 'Create'} failed: ${err.error?.message || err.message}`,
+          'Close',
+          {
+            duration: 3000,
+            verticalPosition: 'top',
+          }
+        );
+      }
     });
   }
+  
 }
