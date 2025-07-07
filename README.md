@@ -46,7 +46,7 @@ yarn start
 ### `.env.example`
 
 ```env
-MONGODB_URI=mongodb+srv://admin:admin@patientvisit.hvuuyu4.mongodb.net/?retryWrites=true&w=majority&appName=PatientVisit
+MONGODB_URI='YOUR_MONGODB_URL'
 PORT=3000
 ```
 
