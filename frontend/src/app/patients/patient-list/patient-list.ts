@@ -11,6 +11,7 @@ import { PatientForm } from '../patient-form/patient-form';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { CommonModule } from '@angular/common';
+import { Summary } from '../../summary/summary';
 
 
 
@@ -128,5 +129,12 @@ export class PatientList implements OnInit {
     console.log('Clicked patient ID:', patient.id || patient._id || '[No ID found]');
     console.log('Patient row object:', patient);
 
+  }
+
+  viewPatientSummary(patient: any): void {
+    this.dialog.open(Summary, {
+      width: '800px',
+      data: { patient }
+    });
   }
 }

@@ -1,1 +1,33 @@
-<p>summary works!</p>
+<div class="summary-container" *ngIf="patient && visits">
+    <div class="close-button-container">
+        <button mat-icon-button (click)="close()" aria-label="Close summary dialog">
+            <mat-icon>close</mat-icon>
+        </button></div>
+    <h2>{{ patient.firstName }} {{ patient.lastName }}'s Visit Summary</h2>
+    <p>Email: {{ patient.email }}</p>
+
+    <mat-card class="summary-box">
+        <h3>Total Visits: {{ visits.length }}</h3>
+    </mat-card>
+
+    <table mat-table [dataSource]="visits" class="mat-elevation-z8">
+        <ng-container matColumnDef="visitDate">
+            <th mat-header-cell *matHeaderCellDef>Date</th>
+            <td mat-cell *matCellDef="let visit">{{ visit.visitDate | date }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="visitType">
+            <th mat-header-cell *matHeaderCellDef>Type</th>
+            <td mat-cell *matCellDef="let visit">{{ visit.visitType }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="notes">
+            <th mat-header-cell *matHeaderCellDef>Notes</th>
+            <td mat-cell *matCellDef="let visit">{{ visit.notes }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+</div>
+  

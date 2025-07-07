@@ -1,14 +1,13 @@
 <mat-toolbar color="primary">
-    <span>Patient Visit Dashboard</span>
+    <span class="title">Patient Visit Dashboard</span>
     <span class="spacer"></span>
 </mat-toolbar>
 
 <mat-sidenav-container class="dashboard-container">
-    <mat-sidenav mode="side" opened>
-        <mat-nav-list>z
+    <mat-sidenav class="sidenav" mode="side" opened>
+        <mat-nav-list>
             <a mat-list-item routerLink="/patients" routerLinkActive="active-link">Patients</a>
             <a mat-list-item routerLink="/visits" routerLinkActive="active-link">Visit</a>
-            <a mat-list-item routerLink="/summary" routerLinkActive="active-link">Summary</a>
         </mat-nav-list>
     </mat-sidenav>
     <mat-sidenav-content>
@@ -16,4 +15,4 @@
             <router-outlet></router-outlet>
         </div>
     </mat-sidenav-content>
-    </mat-sidenav-container>
+</mat-sidenav-container>

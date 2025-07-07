@@ -20,7 +20,7 @@ export class VisitService {
 
   // Get all visits by patient ID
   getVisitsByPatientId(patientId: string): Observable<any[]> {
-    return this.http.get<any[]>(`${this.baseUrl}/visits/patient/${patientId}`);
+    return this.http.get<any[]>(`${this.baseUrl}/visits/patients/${patientId}/visits`);
   }
 
   // Get a specific visit by visit ID
