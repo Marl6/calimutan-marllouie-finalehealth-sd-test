@@ -64,7 +64,7 @@
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef> Actions </th>
           <td mat-cell *matCellDef="let patient">
-            <button type="button" class="actionButton" mat-icon-button color="primary" (click)="editPatient(patient)"
+            <button type="button" class="actionButton" mat-icon-button color="primary" (click)="openEditPatientDialog(patient)"
               matTooltip="Edit Patient">
               <mat-icon>edit</mat-icon>
             </button>
@@ -80,7 +80,7 @@
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onRowClick(row)"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
 
       <mat-paginator [length]="totalLength" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 25]"

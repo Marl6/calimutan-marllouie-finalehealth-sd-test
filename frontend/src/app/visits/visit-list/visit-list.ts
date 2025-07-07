@@ -74,23 +74,28 @@ export class VisitList implements OnInit {
       this.dataSource.data = data.slice(start, end);
     });
   }
-  
-  
-  onRowClick(visit: any): void {
-    console.log('Visit clicked:', visit);
-  }
 
-  editVisit(visit: any): void {
-      this.dialog.open(VisitForm, {
+  openEditVisitDialog(visit: any): void {
+     const dialogRef = this.dialog.open(VisitForm, {
         width: '500px',
         data: {
           id: visit._id,
           patient: visit.patientId 
         }
       });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.visits$ = this.visitService.getAllVisits().pipe();
+          this.visits$.subscribe(data => {
+            this.dataSource.data = data;
+            this.totalLength = data.length;
+          });
+        }
+      });
     }
 
-  openAddPatientDialog() {
+  openAddVisitDialog() {
       const dialogRef = this.dialog.open(VisitForm, {
         width: '500px',
       });

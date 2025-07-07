@@ -7,7 +7,7 @@
         <mat-form-field appearance="fill" class="full-width">
             <mat-label>Patient</mat-label>
             <input type="text" title="patient" matInput formControlName="patientDisplay" [matAutocomplete]="auto" required />
-            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onPatientSelected($event.option.value)">
+            <mat-autocomplete (closed)="onAutocompleteClosed()" #auto="matAutocomplete" (optionSelected)="onPatientSelected($event.option.value)">
                 <mat-option *ngFor="let patient of filteredPatients | async" [value]="patient">
                     {{ displayPatientName(patient) }}
                 </mat-option>

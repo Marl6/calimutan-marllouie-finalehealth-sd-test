@@ -84,7 +84,7 @@ export class PatientList implements OnInit {
       this.isLoading = false;
     });
   }
-  
+
 
   onPageChange(event: PageEvent): void {
     this.pageSize = event.pageSize;
@@ -110,15 +110,29 @@ export class PatientList implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.onSearch();
+        this.patients$ = this.patientService.getPatients().pipe();
+        this.patients$.subscribe(data => {
+          this.dataSource.data = data;
+          this.totalLength = data.length;
+        });
       }
     });
   }
 
-  editPatient(patient: any): void {
-    this.dialog.open(PatientForm, {
+  openEditPatientDialog(patient: any): void {
+    const dialogRef = this.dialog.open(PatientForm, {
       width: '500px',
       data: { id: patient._id }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.patients$ = this.patientService.getPatients().pipe();
+        this.patients$.subscribe(data => {
+          this.dataSource.data = data;
+          this.totalLength = data.length;
+        });
+      }
     });
   }
 
@@ -138,10 +152,6 @@ export class PatientList implements OnInit {
         error: err => alert('Delete failed: ' + (err.error?.message || err.message))
       });
     }
-  }
-
-  onRowClick(patient: any): void {
-    console.log('Patient row object:', patient);
   }
 
   viewPatientSummary(patient: any): void {
