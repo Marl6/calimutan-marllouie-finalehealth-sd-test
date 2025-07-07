@@ -1,1 +1,47 @@
-<p>visit-form works!</p>
+<div class="visitForm">
+    <div class="form-header">
+        <h1>{{ isEdit ? 'Edit Visit Detail' : 'Add New Visit' }}</h1>
+    </div>
+
+    <form class="visitForm" [formGroup]="form" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Patient</mat-label>
+            <input type="text" title="patient" matInput formControlName="patientDisplay" [matAutocomplete]="auto" required />
+            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onPatientSelected($event.option.value)">
+                <mat-option *ngFor="let patient of filteredPatients | async" [value]="patient">
+                    {{ displayPatientName(patient) }}
+                </mat-option>
+            </mat-autocomplete>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill" class="full-width">
+                <mat-label>Visit Date</mat-label>
+                <input title="visitDate" matInput [matDatepicker]="visitDatePicker" formControlName="visitDate" required />
+                <mat-datepicker-toggle matIconSuffix [for]="visitDatePicker"></mat-datepicker-toggle>
+                <mat-datepicker #visitDatePicker></mat-datepicker>
+                <mat-error *ngIf="form.get('visitDate')?.hasError('required')">
+                    Visit date is required
+                </mat-error>
+            </mat-form-field>
+
+        <mat-form-field appearance="fill">
+            <mat-label>Visit Type</mat-label>
+            <mat-select formControlName="visitType">
+                <mat-option *ngFor="let type of visitTypes" [value]="type.value">
+                    {{ type.label }}     </mat-option>
+            </mat-select>
+        </mat-form-field>
+          
+        <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Notes</mat-label>
+            <textarea matInput formControlName="notes" title="notes" rows="4"
+                placeholder="Enter any additional notes about the visit...">
+        </textarea>
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">
+            {{ isEdit ? 'Update Visit' : 'Create Visit' }}
+        </button>
+
+    </form>
+    </div>
