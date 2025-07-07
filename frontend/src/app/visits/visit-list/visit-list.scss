@@ -1,0 +1,27 @@
+:host {
+    p {
+        color: red;
+    }
+}
+
+.patient-list-actions {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+    justify-content: center;
+
+    mat-form-field {
+        margin-left: 16px;
+        flex: 1;
+    }
+
+    .addPatientButton {
+        margin-right: 16px;
+        margin-bottom: 20px;
+        padding: 15px;
+    }
+
+    .closeButton {
+        margin-right: 16px;
+    }
+}

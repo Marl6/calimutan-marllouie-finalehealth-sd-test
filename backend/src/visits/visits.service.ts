@@ -6,7 +6,6 @@ import { CreateVisitDto } from './dto/create-visit.dto';
 import { UpdateVisitDto } from './dto/update-visit.dto';
 import { Patient, PatientDocument } from '../patients/schemas/patient.schema';
 
-
 @Injectable()
 export class VisitsService {
   constructor(
@@ -19,31 +18,40 @@ export class VisitsService {
       ...createVisitDto,
       patientId: new Types.ObjectId(patientId),
     });
-  
+
     const savedVisit = await createdVisit.save();
-    
+
     // Increment the patient's visit count
     await this.patientModel.findByIdAndUpdate(
       patientId,
       { $inc: { totalVisits: 1 } }
     );
-  
+
     return savedVisit;
   }
 
   async getAllVisits(): Promise<Visit[]> {
-    return this.visitModel.find().sort({ visitDate: -1 }).exec();
+    return this.visitModel
+      .find()
+      .populate('patientId', 'firstName lastName')
+      .sort({ visitDate: -1 })
+      .exec();
   }
-  
+
   async getAllVisitsByPatientID(patientId: string): Promise<Visit[]> {
     return this.visitModel
       .find({ patientId: new Types.ObjectId(patientId) })
+      .populate('patientId', 'firstName lastName')
       .sort({ visitDate: -1 })
       .exec();
   }
 
   async getVisitByVisitId(id: string): Promise<Visit> {
-    const visit = await this.visitModel.findById(id).exec();
+    const visit = await this.visitModel
+      .findById(id)
+      .populate('patientId', 'firstName lastName')
+      .exec();
+    
     if (!visit) {
       throw new NotFoundException(`Visit with ID ${id} not found`);
     }
@@ -53,8 +61,9 @@ export class VisitsService {
   async update(id: string, updateVisitDto: UpdateVisitDto): Promise<Visit> {
     const updatedVisit = await this.visitModel
       .findByIdAndUpdate(id, updateVisitDto, { new: true })
+      .populate('patientId', 'firstName lastName')
       .exec();
-    
+
     if (!updatedVisit) {
       throw new NotFoundException(`Visit with ID ${id} not found`);
     }
