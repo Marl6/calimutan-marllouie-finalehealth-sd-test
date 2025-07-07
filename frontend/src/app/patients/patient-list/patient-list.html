@@ -7,7 +7,7 @@
     <mat-form-field appearance="outline">
       <mat-label>Search patient by name or email </mat-label>
       <input class="searchInput" matInput [(ngModel)]="search" (ngModelChange)="onSearch()"
-        placeholder="Type to search..." />
+        placeholder="Type to search..."/>
       <button class="closeButton" *ngIf="search" matSuffix (click)="clearSearch()" aria-label="Clear">
         <mat-icon>close</mat-icon>
       </button>
@@ -15,7 +15,7 @@
   </div>
   
 
-  <table mat-table [dataSource]="(patients$ | async) ?? []" class="mat-elevation-z8" *ngIf="patients$ | async as patients">
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" *ngIf="patients$ | async as patients">
 
     <ng-container matColumnDef="firstName">
       <th mat-header-cell *matHeaderCellDef> First Name </th>
@@ -50,6 +50,11 @@
       <td mat-cell *matCellDef="let patient"> {{patient.address}} </td>
     </ng-container>
 
+    <ng-container matColumnDef="totalVisits">
+      <th mat-header-cell *matHeaderCellDef> Total # of Visits </th>
+      <td mat-cell *matCellDef="let patient"> {{patient.totalVisits}} </td>
+    </ng-container>
+
 
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef> Actions </th>
@@ -68,6 +73,10 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onRowClick(row)"></tr>
   </table>
+
+  <mat-paginator [length]="totalLength" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 25]"
+    (page)="onPageChange($event)">
+  </mat-paginator>
 
   <div *ngIf="(patients$ | async)?.length === 0" class="no-data">
     No patients found.

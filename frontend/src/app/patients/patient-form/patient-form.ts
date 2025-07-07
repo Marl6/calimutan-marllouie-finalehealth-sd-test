@@ -1,4 +1,5 @@
-import { Component, OnInit, inject, Optional } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -15,7 +16,8 @@ import { PatientService } from '../../services/patient-services';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatDialogModule
+    MatDialogModule,
+    CommonModule
   ],
   templateUrl: './patient-form.html',
   styleUrl: './patient-form.scss'

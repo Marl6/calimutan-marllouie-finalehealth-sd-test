@@ -2,13 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { PatientService } from '../../services/patient-services';
 import { Observable } from 'rxjs';
 import { DatePipe, NgIf, AsyncPipe } from '@angular/common';
-import { MatTableModule } from '@angular/material/table';
+import { MatTableModule, MatTableDataSource  } from '@angular/material/table';
 import { FormsModule } from '@angular/forms';
 import { MatIcon } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { PatientForm } from '../patient-form/patient-form';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { CommonModule } from '@angular/common';
+
 
 
 @Component({
@@ -23,14 +26,17 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
     MatIcon,
     MatFormFieldModule,
     MatInputModule,
-    PatientForm,
     MatDialogModule,
-    
+    CommonModule,
+    MatPaginatorModule
   ],
   templateUrl: './patient-list.html',
   styleUrl: './patient-list.scss'
 })
 export class PatientList implements OnInit {
+  dataSource = new MatTableDataSource<any>([]);
+  pageSize = 5;
+  totalLength = 0;
   search: string = '';
   patients$!: Observable<any[]>;
   displayedColumns: string[] = [
@@ -40,6 +46,7 @@ export class PatientList implements OnInit {
     'email',
     'phoneNumber',
     'address',
+    'totalVisits',
     'actions'
   ];
 
@@ -54,7 +61,24 @@ export class PatientList implements OnInit {
 
   ngOnInit() {
     this.patients$ = this.patientService.getPatients();
+
+    this.patients$.subscribe(data => {
+      this.dataSource.data = data;
+      this.totalLength = data.length;
+    });
   }
+
+  onPageChange(event: PageEvent): void {
+    this.pageSize = event.pageSize;
+  
+    const start = event.pageIndex * event.pageSize;
+    const end = start + event.pageSize;
+  
+    this.patients$.subscribe(data => {
+      this.dataSource.data = data.slice(start, end);
+    });
+  }
+  
 
   clearSearch() { 
     this.search = '';

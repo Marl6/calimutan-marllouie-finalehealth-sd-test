@@ -1,47 +1,37 @@
-<!-- visit-form.component.html -->
 <div class="visitForm">
     <div class="form-header">
         <h1>{{ isEdit ? 'Edit Visit Detail' : 'Add New Visit' }}</h1>
     </div>
 
     <form class="visitForm" [formGroup]="form" (ngSubmit)="onSubmit()">
-
-        <!-- Patient Selection with Autocomplete -->
         <mat-form-field appearance="fill" class="full-width">
             <mat-label>Patient</mat-label>
-            <input matInput formControlName="patientDisplay" [matAutocomplete]="patientAuto"
-                placeholder="Search patient by name or email" title="patient" required>
-            <mat-autocomplete #patientAuto="matAutocomplete" [displayWith]="displayPatientName"
-                (optionSelected)="onPatientSelected($event.option.value)">
+            <input type="text" title="patient" matInput formControlName="patientDisplay" [matAutocomplete]="auto" required />
+            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onPatientSelected($event.option.value)">
                 <mat-option *ngFor="let patient of filteredPatients | async" [value]="patient">
-                    <div class="patient-option">
-                        <div class="patient-name">{{ patient.firstName }} {{ patient.lastName }}</div>
-                        <div class="patient-email">{{ patient.email }}</div>
-                    </div>
+                    {{ displayPatientName(patient) }}
                 </mat-option>
             </mat-autocomplete>
-            <mat-error *ngIf="form.get('patientDisplay')?.hasError('required')">Patient is required</mat-error>
-        </mat-form-field>
+            </mat-form-field>
 
-        <!-- Visit Date -->
-        <mat-form-field appearance="fill" class="full-width">
-            <mat-label>Visit Date</mat-label>
-            <input matInput type="datetime-local" formControlName="visitDate" title="visitDate" required>
-            <mat-error *ngIf="form.get('visitDate')?.hasError('required')">Visit date is required</mat-error>
-        </mat-form-field>
+            <mat-form-field appearance="fill" class="full-width">
+                <mat-label>Visit Date</mat-label>
+                <input title="visitDate" matInput [matDatepicker]="visitDatePicker" formControlName="visitDate" required />
+                <mat-datepicker-toggle matIconSuffix [for]="visitDatePicker"></mat-datepicker-toggle>
+                <mat-datepicker #visitDatePicker></mat-datepicker>
+                <mat-error *ngIf="form.get('visitDate')?.hasError('required')">
+                    Visit date is required
+                </mat-error>
+            </mat-form-field>
 
-        <!-- Visit Type -->
-        <mat-form-field appearance="fill" class="full-width">
+        <mat-form-field appearance="fill">
             <mat-label>Visit Type</mat-label>
-            <mat-select formControlName="visitType" title="visitType" required>
+            <mat-select formControlName="visitType">
                 <mat-option *ngFor="let type of visitTypes" [value]="type.value">
-                    {{ type.label }}
-                </mat-option>
+                    {{ type.label }}     </mat-option>
             </mat-select>
-            <mat-error *ngIf="form.get('visitType')?.hasError('required')">Visit type is required</mat-error>
         </mat-form-field>
-
-        <!-- Notes -->
+          
         <mat-form-field appearance="fill" class="full-width">
             <mat-label>Notes</mat-label>
             <textarea matInput formControlName="notes" title="notes" rows="4"
@@ -49,7 +39,6 @@
         </textarea>
         </mat-form-field>
 
-        <!-- Submit Button -->
         <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">
             {{ isEdit ? 'Update Visit' : 'Create Visit' }}
         </button>

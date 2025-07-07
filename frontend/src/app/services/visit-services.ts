@@ -10,7 +10,7 @@ export class VisitService {
 
   // Create a new visit for a patient
   createVisit(patientId: string, data: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/visits/patient/${patientId}`, data);
+    return this.http.post(`${this.baseUrl}/visits/patients/${patientId}/visits`, data);
   }
 
   // Get all visits

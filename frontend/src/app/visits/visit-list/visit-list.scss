@@ -4,18 +4,18 @@
     }
 }
 
-.patient-list-actions {
+.visit-list-actions {
     display: flex;
     align-items: center;
     margin-bottom: 16px;
-    justify-content: center;
+    justify-content: end;
 
     mat-form-field {
         margin-left: 16px;
         flex: 1;
     }
 
-    .addPatientButton {
+    .addVisitButton {
         margin-right: 16px;
         margin-bottom: 20px;
         padding: 15px;
@@ -23,5 +23,5 @@
 
     .closeButton {
         margin-right: 16px;
-    }
+    } 
 }

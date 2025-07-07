@@ -14,21 +14,21 @@ export class VisitsService {
   ) {}
 
   async create(patientId: string, createVisitDto: CreateVisitDto): Promise<Visit> {
+    const patient = await this.patientModel.findById(patientId).exec();
+    if (!patient) {
+        throw new NotFoundException(`Patient with ID ${patientId} not found`);
+    }
     const createdVisit = new this.visitModel({
-      ...createVisitDto,
-      patientId: new Types.ObjectId(patientId),
+        ...createVisitDto,
+        patientId: new Types.ObjectId(patientId),
     });
-
     const savedVisit = await createdVisit.save();
-
-    // Increment the patient's visit count
     await this.patientModel.findByIdAndUpdate(
-      patientId,
-      { $inc: { totalVisits: 1 } }
+        patientId,
+        { $inc: { totalVisits: 1 } }
     );
-
     return savedVisit;
-  }
+}
 
   async getAllVisits(): Promise<Visit[]> {
     return this.visitModel
