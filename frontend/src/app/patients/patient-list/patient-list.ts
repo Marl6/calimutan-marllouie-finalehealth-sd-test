@@ -12,8 +12,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { CommonModule } from '@angular/common';
 import { Summary } from '../../summary/summary';
-
-
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-patient-list',
@@ -29,12 +28,14 @@ import { Summary } from '../../summary/summary';
     MatInputModule,
     MatDialogModule,
     CommonModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatButtonModule
   ],
   templateUrl: './patient-list.html',
   styleUrl: './patient-list.scss'
 })
 export class PatientList implements OnInit {
+  isLoading: boolean = true;
   searchChanged: Subject<string> = new Subject<string>();
   dataSource = new MatTableDataSource<any>([]);
   pageSize = 5;
@@ -62,28 +63,28 @@ export class PatientList implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.isLoading = true;
+  
     this.searchChanged.pipe(
       debounceTime(1000)
     ).subscribe((searchTerm: string) => {
+      this.isLoading = true;
       this.patientService.getPatients(searchTerm).subscribe(data => {
         this.dataSource.data = data;
         this.totalLength = data.length;
+        this.isLoading = false;
       });
     });
   
-    // Initial fetch
-    this.patientService.getPatients().subscribe(data => {
-      this.dataSource.data = data;
-      this.totalLength = data.length;
-    });
-    
     this.patients$ = this.patientService.getPatients();
-
+  
     this.patients$.subscribe(data => {
       this.dataSource.data = data;
       this.totalLength = data.length;
+      this.isLoading = false;
     });
   }
+  
 
   onPageChange(event: PageEvent): void {
     this.pageSize = event.pageSize;

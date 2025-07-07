@@ -16,12 +16,26 @@
     }
 
     .addVisitButton {
-        margin-right: 16px;
-        margin-bottom: 20px;
-        padding: 15px;
+        margin-left: auto;
+        background-color: #1976d2;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        font-weight: 500;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      
     }
 
     .closeButton {
         margin-right: 16px;
     } 
+}
+
+.loading {
+    text-align: center;
+    font-size: 18px;
+    padding: 24px;
+    color: #666; 
 }

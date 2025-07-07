@@ -3,8 +3,14 @@
         <button mat-icon-button (click)="close()" aria-label="Close summary dialog">
             <mat-icon>close</mat-icon>
         </button></div>
-    <h2>{{ patient.firstName }} {{ patient.lastName }}'s Visit Summary</h2>
-    <p>Email: {{ patient.email }}</p>
+    <h2 class="patientTitle">{{ patient.firstName }}'s Patient Summary</h2>
+    <div class="patient-summary">
+        <p><strong>Full Name: </strong> {{ patient.firstName }} {{ patient.lastName }}</p>
+        <p><strong>Email:</strong> {{ patient.email }}</p>
+        <p><strong>BirthDate:</strong> {{ patient.dob | date: 'MMM d, y' }}</p>
+        <p><strong>Phone Number:</strong> {{ patient.phoneNumber }}</p>
+    </div>
+      
 
     <mat-card class="summary-box">
         <h3>Total Visits: {{ visits.length }}</h3>
