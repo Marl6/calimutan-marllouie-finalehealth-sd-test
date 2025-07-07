@@ -16,7 +16,6 @@ import { PatientService } from '../../services/patient-services';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { VisitType } from '../../enums/enums';
 
-
 export interface Patient {
   _id: string;
   firstName: string;
@@ -71,6 +70,7 @@ export const CUSTOM_DATE_FORMATS = {
 )
 
 export class VisitForm implements OnInit {
+  originalPatient!: Patient;
   visitService = inject(VisitService);
   patientService = inject(PatientService);
   route = inject(ActivatedRoute);
@@ -114,6 +114,7 @@ export class VisitForm implements OnInit {
         this.setupPatientAutocomplete();
 
         if (this.dialogData?.patient) {
+          this.originalPatient = this.dialogData.patient;
           this.form.patchValue({
             patientId: this.dialogData.patient._id,
             patientDisplay: this.displayPatientName(this.dialogData.patient)
@@ -163,12 +164,27 @@ public filterPatients(value: string | Patient): Patient[] {
     });
   }
 
+  onAutocompleteClosed(): void {
+  const patientDisplay = this.form.get('patientDisplay')?.value;
+
+  const isValidPatient = typeof patientDisplay === 'object' && patientDisplay?._id;
+  if (!isValidPatient && this.originalPatient) {
+    this.form.patchValue({
+      patientId: this.originalPatient._id,
+      patientDisplay: this.displayPatientName(this.originalPatient)
+    });
+  }
+}
+
   private loadVisit(id: string): void {
     this.visitId = id;
     this.isEdit = true;
     this.visitService.getVisitById(id).subscribe({
       next: (visit) => {
         const patient = this.patients.find(p => p._id === visit.patientId);
+        if (patient) {
+          this.originalPatient = patient;
+        }
         this.form.patchValue({
           patientId: visit.patientId,
           patientDisplay: patient ? this.displayPatientName(patient) : '',

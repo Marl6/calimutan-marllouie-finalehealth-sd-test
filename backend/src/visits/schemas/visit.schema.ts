@@ -36,7 +36,6 @@ export class Visit {
 
 export const VisitSchema = SchemaFactory.createForClass(Visit);
 
-// Update dateUpdated on save
 VisitSchema.pre('save', function(next) {
   this.dateUpdated = new Date();
   next();

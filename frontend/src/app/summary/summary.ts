@@ -14,7 +14,6 @@ import { MatIcon } from '@angular/material/icon';
   styleUrl: './summary.scss'
 })
 export class Summary implements OnInit {
-  // Inject dialog data and dialog ref
   dialogData = inject<{ patient: any }>(MAT_DIALOG_DATA);
   dialogRef = inject(MatDialogRef<Summary>);
   private visitService = inject(VisitService);

@@ -4,37 +4,31 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class VisitService {
-  private baseUrl = 'http://localhost:3000';
+  private baseUrl = 'http://localhost:3000/visits';
 
   constructor(private http: HttpClient) {}
 
-  // Create a new visit for a patient
   createVisit(patientId: string, data: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/visits/patients/${patientId}/visits`, data);
+    return this.http.post(`${this.baseUrl}/patients/${patientId}/visits`, data);
   }
 
-  // Get all visits
   getAllVisits(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.baseUrl}/visits`);
+    return this.http.get<any[]>(`${this.baseUrl}`);
   }
 
-  // Get all visits by patient ID
   getVisitsByPatientId(patientId: string): Observable<any[]> {
-    return this.http.get<any[]>(`${this.baseUrl}/visits/patients/${patientId}/visits`);
+    return this.http.get<any[]>(`${this.baseUrl}/patients/${patientId}/visits`);
   }
 
-  // Get a specific visit by visit ID
   getVisitById(visitId: string): Observable<any> {
-    return this.http.get<any>(`${this.baseUrl}/visits/${visitId}`);
+    return this.http.get<any>(`${this.baseUrl}/${visitId}`);
   }
 
-  // Update a visit
   updateVisit(visitId: string, data: any): Observable<any> {
-    return this.http.patch(`${this.baseUrl}/visits/${visitId}`, data);
+    return this.http.patch(`${this.baseUrl}/${visitId}`, data);
   }
 
-  // Delete a visit
   deleteVisit(visitId: string): Observable<any> {
-    return this.http.delete(`${this.baseUrl}/visits/${visitId}`);
+    return this.http.delete(`${this.baseUrl}/${visitId}`);
   }
 }

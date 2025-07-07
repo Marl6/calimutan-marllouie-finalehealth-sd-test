@@ -35,7 +35,6 @@ export class Patient {
 
 export const PatientSchema = SchemaFactory.createForClass(Patient);
 
-// Update dateUpdated on save
 PatientSchema.pre('save', function(next) {
   this.dateUpdated = new Date();
   next();
