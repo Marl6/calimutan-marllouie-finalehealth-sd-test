@@ -16,13 +16,6 @@
     .form-header {
         text-align: center;
         margin-bottom: 24px;
-
-        h1 {
-            color: #333;
-            font-size: 24px;
-            font-weight: 500;
-            margin: 0;
-        }
     }
 
     .patient-option {
@@ -63,10 +56,15 @@
     }
 }
 
-
-@media (max-width: 768px) {
-    .visitForm {
-        padding: 12px;
-        max-width: 100%;
-        margin: 0 8px;
-    } }
+.form-header {
+    background: #1976d2;
+    color: white;
+    padding: 1rem;
+    margin-top: -1rem;
+    margin-left: -1rem;
+    margin-right: -1rem;
+    
+    h1{
+        font-family: 'Poppins', sans-serif;
+    }
+}

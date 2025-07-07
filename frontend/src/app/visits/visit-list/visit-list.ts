@@ -28,7 +28,7 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 })
 export class VisitList implements OnInit {
   private visitService = inject(VisitService);
-
+  isLoading: boolean = true;
   dataSource = new MatTableDataSource<any>([]);
   pageSize = 5;
   totalLength = 0;
@@ -50,23 +50,19 @@ export class VisitList implements OnInit {
       private dialog: MatDialog 
     ) {}
 
-  ngOnInit(): void {
-    this.visits$ = this.visitService.getAllVisits().pipe(
-      tap(visits => {
-        console.log('Raw visits data:', visits);
-        if (visits.length > 0) {
-          console.log('First visit structure:', JSON.stringify(visits[0], null, 2));
-          console.log('PatientId type:', typeof visits[0].patientId);
-          console.log('PatientId value:', visits[0].patientId);
-        }
-      })
-    );
+ ngOnInit(): void {
+  this.isLoading = true;
 
-    this.visits$.subscribe(data => {
-      this.dataSource.data = data;
-      this.totalLength = data.length;
-    });
-  }
+  this.visits$ = this.visitService.getAllVisits().pipe(
+    tap(visits => {
+      this.dataSource.data = visits;
+      this.totalLength = visits.length;
+      this.isLoading = false; 
+    })
+  );
+
+  this.visits$.subscribe();
+}
 
   onPageChange(event: PageEvent): void {
     this.pageSize = event.pageSize;
@@ -82,13 +78,9 @@ export class VisitList implements OnInit {
   
   onRowClick(visit: any): void {
     console.log('Visit clicked:', visit);
-    console.log('Patient ID:', visit.patientId?._id || visit.patientId);
-    console.log('Patient First Name:', visit.patientId?.firstName || '-');
-    console.log('Patient Last Name:', visit.patientId?.lastName || '-');
   }
 
   editVisit(visit: any): void {
-    console.log('Editing visit:', visit);
       this.dialog.open(VisitForm, {
         width: '500px',
         data: {
@@ -105,11 +97,7 @@ export class VisitList implements OnInit {
   
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
-          this.visits$ = this.visitService.getAllVisits().pipe(
-            tap(visits => {
-              console.log('Visits after dialog close:', visits);
-            })
-          );
+          this.visits$ = this.visitService.getAllVisits().pipe();
         }
       });
     }

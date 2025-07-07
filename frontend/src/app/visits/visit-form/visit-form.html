@@ -12,17 +12,14 @@
                     {{ displayPatientName(patient) }}
                 </mat-option>
             </mat-autocomplete>
-            </mat-form-field>
+        </mat-form-field>
 
-            <mat-form-field appearance="fill" class="full-width">
-                <mat-label>Visit Date</mat-label>
-                <input title="visitDate" matInput [matDatepicker]="visitDatePicker" formControlName="visitDate" required />
-                <mat-datepicker-toggle matIconSuffix [for]="visitDatePicker"></mat-datepicker-toggle>
-                <mat-datepicker #visitDatePicker></mat-datepicker>
-                <mat-error *ngIf="form.get('visitDate')?.hasError('required')">
-                    Visit date is required
-                </mat-error>
-            </mat-form-field>
+        <mat-form-field appearance="fill">
+            <mat-label>Date of Visit</mat-label>
+            <input matInput title="visitDate" [matDatepicker]="picker" formControlName="visitDate"/>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
 
         <mat-form-field appearance="fill">
             <mat-label>Visit Type</mat-label>

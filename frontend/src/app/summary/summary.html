@@ -1,1 +1,41 @@
-<p>summary works!</p>
+<div class="summary-container" *ngIf="patient && visits">
+    <div class="close-button-container">
+        <button mat-icon-button (click)="close()" aria-label="Close summary dialog">
+            <mat-icon>close</mat-icon>
+        </button></div>
+    <h2 class="patientTitle">{{ patient.firstName }}'s Patient Summary</h2>
+    <div class="patient-summary">
+        <p><strong>Full Name: </strong> {{ patient.firstName }} {{ patient.lastName }}</p>
+        <p><strong>Email:</strong> {{ patient.email }}</p>
+        <p><strong>BirthDate:</strong> {{ patient.dob | date: 'MMM d, y' }}</p>
+        <p><strong>Phone Number:</strong> {{ patient.phoneNumber }}</p>
+    </div>
+      
+
+    <mat-card class="summary-box">
+        <h3>Total Visits: {{ visits.length }}</h3>
+    </mat-card>
+
+    <h3 class="visitHistory-title">Visit History</h3>
+
+    <table mat-table [dataSource]="visits" class="mat-elevation-z8">
+        <ng-container matColumnDef="visitDate">
+            <th mat-header-cell *matHeaderCellDef>Date</th>
+            <td mat-cell *matCellDef="let visit">{{ visit.visitDate | date }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="visitType">
+            <th mat-header-cell *matHeaderCellDef>Type</th>
+            <td mat-cell *matCellDef="let visit">{{ visit.visitType }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="notes">
+            <th mat-header-cell *matHeaderCellDef>Notes</th>
+            <td mat-cell *matCellDef="let visit">{{ visit.notes }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+</div>
+  

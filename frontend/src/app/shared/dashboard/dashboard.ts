@@ -4,6 +4,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { RouterModule } from '@angular/router';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,7 +14,8 @@ import { RouterModule } from '@angular/router';
     MatSidenavModule,
     MatButtonModule,
     MatListModule,
-    RouterModule
+    RouterModule,
+    MatIcon
   ],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss'

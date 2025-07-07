@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PatientService } from '../../services/patient-services';
-import { Observable } from 'rxjs';
+import { Observable, Subject, debounceTime } from 'rxjs';
 import { DatePipe, NgIf, AsyncPipe } from '@angular/common';
 import { MatTableModule, MatTableDataSource  } from '@angular/material/table';
 import { FormsModule } from '@angular/forms';
@@ -11,8 +11,8 @@ import { PatientForm } from '../patient-form/patient-form';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { CommonModule } from '@angular/common';
-
-
+import { Summary } from '../../summary/summary';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-patient-list',
@@ -28,12 +28,15 @@ import { CommonModule } from '@angular/common';
     MatInputModule,
     MatDialogModule,
     CommonModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatButtonModule
   ],
   templateUrl: './patient-list.html',
   styleUrl: './patient-list.scss'
 })
 export class PatientList implements OnInit {
+  isLoading: boolean = true;
+  searchChanged: Subject<string> = new Subject<string>();
   dataSource = new MatTableDataSource<any>([]);
   pageSize = 5;
   totalLength = 0;
@@ -50,8 +53,8 @@ export class PatientList implements OnInit {
     'actions'
   ];
 
-  onSearch(){
-    this.patients$ = this.patientService.getPatients(this.search);
+  onSearch() {
+    this.searchChanged.next(this.search);
   }
 
   constructor(
@@ -60,13 +63,28 @@ export class PatientList implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.isLoading = true;
+  
+    this.searchChanged.pipe(
+      debounceTime(1000)
+    ).subscribe((searchTerm: string) => {
+      this.isLoading = true;
+      this.patientService.getPatients(searchTerm).subscribe(data => {
+        this.dataSource.data = data;
+        this.totalLength = data.length;
+        this.isLoading = false;
+      });
+    });
+  
     this.patients$ = this.patientService.getPatients();
-
+  
     this.patients$.subscribe(data => {
       this.dataSource.data = data;
       this.totalLength = data.length;
+      this.isLoading = false;
     });
   }
+  
 
   onPageChange(event: PageEvent): void {
     this.pageSize = event.pageSize;
@@ -116,17 +134,20 @@ export class PatientList implements OnInit {
     if (confirm(`Are you sure you want to delete ${fullName}?`)) {
       this.patientService.deletePatient(id).subscribe({
         next: () => {
-          this.onSearch();
-          console.log(`Deleted patient: ${fullName}`);
-        },
+          this.onSearch();        },
         error: err => alert('Delete failed: ' + (err.error?.message || err.message))
       });
     }
   }
 
   onRowClick(patient: any): void {
-    console.log('Clicked patient ID:', patient.id || patient._id || '[No ID found]');
     console.log('Patient row object:', patient);
+  }
 
+  viewPatientSummary(patient: any): void {
+    this.dialog.open(Summary, {
+      width: '800px',
+      data: { patient }
+    });
   }
 }
