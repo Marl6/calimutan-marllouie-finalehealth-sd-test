@@ -7,7 +7,7 @@ import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/materia
 import { MatSelectModule } from '@angular/material/select';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
+import { MAT_DATE_LOCALE, MatNativeDateModule, MAT_DATE_FORMATS } from '@angular/material/core';
 import { MatOptionModule } from '@angular/material/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, map, startWith, of } from 'rxjs';
@@ -32,6 +32,18 @@ export interface Visit {
   visitType: 'Home' | 'Telehealth' | 'Clinic';
 }
 
+export const CUSTOM_DATE_FORMATS = {
+  parse: {
+    dateInput: 'MMM d, yyyy, h : mm a',
+  },
+  display: {
+    dateInput: 'MMM d, yyyy, h : mm a',
+    monthYearLabel: 'MMM yyyy',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM yyyy',
+  }
+};
+
 @Component({
   selector: 'app-visit-form',
   standalone: true,
@@ -50,11 +62,14 @@ export interface Visit {
     MatOptionModule,
     AsyncPipe,
   ], providers: [
-    { provide: MAT_DATE_LOCALE, useValue: 'en-US' }
+    { provide: MAT_DATE_LOCALE, useValue: 'en-US' },
+    { provide: MAT_DATE_FORMATS, useValue: CUSTOM_DATE_FORMATS }
   ],
   templateUrl: './visit-form.html',
   styleUrl: './visit-form.scss'
-})
+}
+)
+
 export class VisitForm implements OnInit {
   visitService = inject(VisitService);
   patientService = inject(PatientService);

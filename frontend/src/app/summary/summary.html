@@ -10,6 +10,8 @@
         <h3>Total Visits: {{ visits.length }}</h3>
     </mat-card>
 
+    <h3 class="visitHistory-title">Visit History</h3>
+
     <table mat-table [dataSource]="visits" class="mat-elevation-z8">
         <ng-container matColumnDef="visitDate">
             <th mat-header-cell *matHeaderCellDef>Date</th>

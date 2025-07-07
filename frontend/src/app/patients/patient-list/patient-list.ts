@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PatientService } from '../../services/patient-services';
-import { Observable } from 'rxjs';
+import { Observable, Subject, debounceTime } from 'rxjs';
 import { DatePipe, NgIf, AsyncPipe } from '@angular/common';
 import { MatTableModule, MatTableDataSource  } from '@angular/material/table';
 import { FormsModule } from '@angular/forms';
@@ -35,6 +35,7 @@ import { Summary } from '../../summary/summary';
   styleUrl: './patient-list.scss'
 })
 export class PatientList implements OnInit {
+  searchChanged: Subject<string> = new Subject<string>();
   dataSource = new MatTableDataSource<any>([]);
   pageSize = 5;
   totalLength = 0;
@@ -51,8 +52,8 @@ export class PatientList implements OnInit {
     'actions'
   ];
 
-  onSearch(){
-    this.patients$ = this.patientService.getPatients(this.search);
+  onSearch() {
+    this.searchChanged.next(this.search);
   }
 
   constructor(
@@ -61,6 +62,21 @@ export class PatientList implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.searchChanged.pipe(
+      debounceTime(1000)
+    ).subscribe((searchTerm: string) => {
+      this.patientService.getPatients(searchTerm).subscribe(data => {
+        this.dataSource.data = data;
+        this.totalLength = data.length;
+      });
+    });
+  
+    // Initial fetch
+    this.patientService.getPatients().subscribe(data => {
+      this.dataSource.data = data;
+      this.totalLength = data.length;
+    });
+    
     this.patients$ = this.patientService.getPatients();
 
     this.patients$.subscribe(data => {
