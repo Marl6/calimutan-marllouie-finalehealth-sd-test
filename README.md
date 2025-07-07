@@ -79,7 +79,7 @@ The frontend will be accessible at `http://localhost:4200`.
 ## ✨ Features
 
 * Patient management (add/edit/delete/search)
-* Visit records with history per patient
+* Visit records (add/edit) with history per patient
 * MongoDB schema validation with class-validator
 * Error routing & loading states
 
